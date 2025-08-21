@@ -1,0 +1,239 @@
+[build-system]
+requires = ["setuptools>=65.6.3", "wheel>=0.37.1"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "anyloc"
+version = "0.1.0"
+description = "Towards Universal Visual Place Recognition"
+readme = "README.md"
+license = {text = "BSD-3-Clause"}
+authors = [
+    {name = "AnyLoc Team", email = "robotics@iiit.ac.in"}
+]
+maintainers = [
+    {name = "AnyLoc Team", email = "robotics@iiit.ac.in"}
+]
+keywords = ["computer-vision", "visual-place-recognition", "deep-learning", "robotics"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Computer Vision",
+]
+requires-python = ">=3.10"
+dependencies = [
+   "transformers==4.28.0",
+    "einops",
+    "fast-pytorch-kmeans==0.1.6",
+    "faiss-gpu==1.7.2",
+    "torchvision==0.14.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.2.0",
+    "pytest-rerunfailures>=10.3.0",
+    "pytest-shard>=0.1.2",
+    "pytest-xdist>=3.1.0",
+    "black>=22.0.0",
+    "isort>=5.10.0",
+    "flake8>=5.0.0",
+    "mypy>=1.0.0",
+    "pre-commit>=2.20.0",
+]
+
+docs = [
+    "sphinx>=5.0.0",
+    "sphinx-rtd-theme>=1.0.0",
+    "myst-parser>=0.18.0",
+    "sphinx-autodoc-typehints>=1.19.0",
+]
+
+gpu = [
+    "cuda-python>=11.7.0",
+    "nvidia-ml-py>=11.4.0",
+]
+
+full = [
+    "anyloc[dev,docs,gpu]",
+]
+
+[project.urls]
+Homepage = "https://anyloc.github.io/"
+Repository = "https://github.com/AnyLoc/AnyLoc"
+Documentation = "https://anyloc.github.io/"
+"Bug Tracker" = "https://github.com/AnyLoc/AnyLoc/issues"
+"Paper" = "https://arxiv.org/abs/2308.00688"
+"Demo" = "https://huggingface.co/spaces/TheProjectsGuy/AnyLoc"
+"Colab Global Descriptors" = "https://colab.research.google.com/github/AnyLoc/AnyLoc/blob/main/demo/anyloc_vlad_generate_colab.ipynb"
+"Colab Cluster Visualizations" = "https://colab.research.google.com/github/AnyLoc/AnyLoc/blob/main/demo/images_vlad_clusters.ipynb"
+
+[project.scripts]
+anyloc-demo = "demo.anyloc_vlad_generate:main"
+anyloc-vlad = "scripts.dino_vlad:main"
+anyloc-dino = "scripts.dino_global_vpr:main"
+
+[tool.setuptools]
+packages = [
+    "anyloc",
+    "demo",
+    "scripts",
+    "custom_datasets",
+    "utilities",
+]
+
+[tool.setuptools.package-data]
+"*" = ["*.py", "*.yml", "*.yaml", "*.json", "*.txt", "*.md"]
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+known_first_party = ["anyloc", "demo", "scripts", "custom_datasets", "utilities"]
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[[tool.mypy.overrides]]
+module = [
+    "torch.*",
+    "torchvision.*",
+    "cv2.*",
+    "PIL.*",
+    "sklearn.*",
+    "skimage.*",
+    "faiss.*",
+    "transformers.*",
+    "clip.*",
+    "open_clip.*",
+]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q --strict-markers --strict-config"
+testpaths = [
+    "tests",
+    "scripts",
+]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "gpu: marks tests that require GPU",
+    "integration: marks tests as integration tests",
+]
+
+[tool.coverage.run]
+source = ["anyloc", "demo", "scripts", "custom_datasets", "utilities"]
+omit = [
+    "*/tests/*",
+    "*/test_*",
+    "*/__pycache__/*",
+    "*/venv/*",
+    "*/env/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
+[tool.ruff]
+target-version = "py38"
+line-length = 88
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "C4", # flake8-comprehensions
+    "UP", # pyupgrade
+]
+ignore = [
+    "E501",  # line too long, handled by black
+    "B008",  # do not perform function calls in argument defaults
+    "C901",  # too complex
+]
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401"]
+"tests/*" = ["B011"]
+
+[tool.pre-commit]
+repos = [
+    {
+        repo = "https://github.com/pre-commit/pre-commit-hooks",
+        rev = "v4.4.0",
+        hooks = [
+            {id = "trailing-whitespace"},
+            {id = "end-of-file-fixer"},
+            {id = "check-yaml"},
+            {id = "check-added-large-files"},
+            {id = "check-merge-conflict"},
+        ],
+    },
+    {
+        repo = "https://github.com/psf/black",
+        rev = "23.3.0",
+        hooks = [{id = "black"}],
+    },
+    {
+        repo = "https://github.com/pycqa/isort",
+        rev = "5.12.0",
+        hooks = [{id = "isort"}],
+    },
+    {
+        repo = "https://github.com/charliermarsh/ruff-pre-commit",
+        rev = "v0.0.270",
+        hooks = [{id = "ruff"}],
+    },
+]
