@@ -1,3 +1,7 @@
+[build-system]
+requires = ["scikit-build-core", "pybind11", "numpy"]
+build-backend = "scikit_build_core.build"
+
 [project]
 name = "anyloc"
 version = "0.2.0"
