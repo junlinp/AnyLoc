@@ -15,18 +15,6 @@ maintainers = [
     {name = "AnyLoc Team", email = "robotics@iiit.ac.in"}
 ]
 keywords = ["computer-vision", "visual-place-recognition", "deep-learning", "robotics"]
-classifiers = [
-    "Development Status :: 4 - Beta",
-    "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: BSD License",
-    "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Topic :: Scientific/Engineering :: Artificial Intelligence",
-    "Topic :: Scientific/Engineering :: Computer Vision",
-]
 requires-python = ">=3.10"
 dependencies = [
    "transformers==4.28.0",
